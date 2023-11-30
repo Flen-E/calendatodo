@@ -3,6 +3,7 @@ import App from './App';
 import { RecoilRoot } from 'recoil';
 import { ThemeProvider, createGlobalStyle } from "styled-components";
 import insungitCutelivelyjisu from './fonts/insungitCutelivelyjisu.ttf';
+
 const GlobalStyle = createGlobalStyle`
 @font-face {
     font-family: 'insungitCutelivelyjisu';

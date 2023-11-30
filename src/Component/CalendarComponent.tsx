@@ -3,6 +3,7 @@ import React from 'react';
 import Calendar from 'react-calendar';
 import styled from 'styled-components';
 import { CalendarProps } from '../types';
+import { useNavigate } from 'react-router-dom';
 
 const GradientBackground = styled.div`
   background: linear-gradient(to bottom, #87CEEB, #FFFF66);
@@ -135,14 +136,17 @@ const StyledCalendar = styled(Calendar)`
   & .react-calendar__navigation__label{
     pointer-events: none;
   }
-  
-
-
-
 
 `;
 
 const CustomCalendar: React.FC<CalendarProps> = ({ events }) => {
+  const navigate = useNavigate();
+
+  const handleDateClick = (value: Date) => {
+    const formattedDate = value.toLocaleDateString().split('T')[0];
+    navigate(`/date/${formattedDate}`);
+  };
+
   return (
     <GradientBackground>
       <StyledCalendar
@@ -150,7 +154,8 @@ const CustomCalendar: React.FC<CalendarProps> = ({ events }) => {
           const hasEvent = events.some(event => event.date.toDateString() === date.toDateString());
           return hasEvent ? <div className="event-dot" /> : null;
         }}
-        calendarType="US" /* Set calendarType to 'US' to start from Sunday */
+        calendarType="US"
+        onClickDay={handleDateClick}
       />
     </GradientBackground>
   );
