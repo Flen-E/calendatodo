@@ -1,16 +1,35 @@
 // src/components/Calendar.tsx
 import React from 'react';
 import Calendar from 'react-calendar';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { CalendarProps } from '../types';
 import { useNavigate } from 'react-router-dom';
 
+const BGAnimation = keyframes`
+  0% {
+    background-position: 0% 50%
+  }
+  50% {
+    background-position: 100% 50%
+  }
+  100% {
+    background-position: 0% 50%
+  }
+`;
+
 const GradientBackground = styled.div`
-  background: linear-gradient(to bottom, #87CEEB, #FFFF66);
+  background: linear-gradient(-45deg,#23A6D5, #87CEEB, #FFFF66, #23D5AB);
   height: 100vh;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center; 
+  background-size: 400% 400%;
+  animation: ${BGAnimation} 15s ease infinite;
+  
+a {
+  text-decoration:none;
+  color:inherit;
+}
   
 `;
 
@@ -21,6 +40,8 @@ const StyledCalendar = styled(Calendar)`
   box-shadow: 0 0 20px #e0e0e0;
   padding : 20px 20px;
   font-family: insungitCutelivelyjisu, sans-serif, Arial;
+
+  
 
   & .react-calendar__tile--now {
     background: #C5FFF8;

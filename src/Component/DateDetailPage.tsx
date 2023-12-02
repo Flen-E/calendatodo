@@ -1,88 +1,147 @@
-import {DragDropContext, DropResult} from "react-beautiful-dnd";
-import { useRecoilState } from "recoil";
+import { DragDropContext, DropResult, Droppable } from "react-beautiful-dnd";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { toDoState } from "../atoms";
 import Board from "./Board";
-import { useParams } from 'react-router-dom';
-import { useEffect } from "react";
+import { useState } from "react";
+import Popup from "./Popup";
 
 const Wrapper = styled.div`
-  display:flex;
-  max-width:680px;
-  width: 100%;
-  margin : 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  width: 100vw;
+  margin: 0 auto;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: auto;
+  padding: 20px;
+  margin-top: 100px;
 `;
 
 const Boards = styled.div`
-  display: grid;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: flex-start;
   width: 100%;
   gap: 10px;
-  grid-template-columns: repeat(3,1fr);
+`;
 
+const CoponentAddButton = styled.div`
+  position: fixed;
+  width: 50px;
+  height: 50px;
+  background: radial-gradient(circle, white 1%, rgba(255, 255, 255, 0) 90%);
+  border-radius: 50px;
+  top: 5%;
+  right: 5%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.5s ease;
+  &:hover {
+    transform: rotate(0.5turn);
+    background-color: #a9fff8;
+  }
+`;
+
+const Icon = styled.img`
+  src: ${(p) => p.src};
+  width: ${(p) => p.width};
 `;
 
 function DateDetailPage() {
-    const { date } = useParams<{ date: string }>();
-  const [toDos, setToDos]  = useRecoilState(toDoState);
-  const onDragEnd = (info : DropResult) =>{
-    console.log(info);
-    const {destination, draggableId, source} = info;
-    if(!destination) return;
-    if(destination?.droppableId === source.droppableId){
-      // same board movement.
-      setToDos((allBoards) =>{
-        const boardCopy = [...allBoards[source.droppableId]];
-        const taskObj = boardCopy[source.index];
-        boardCopy.splice(source.index, 1);
-        boardCopy.splice(destination?.index, 0, taskObj);
-        return {
-          ...allBoards,
-          [source.droppableId] : boardCopy,
-        };
+  const [toDos, setToDos] = useRecoilState(toDoState);
+  const [isModalOpen, setModalOpen] = useState<boolean>(false);
+
+  const onDragEnd = (info: DropResult) => {
+    const { destination, source } = info;
+
+    if (!destination) return;
+    // console.log(info);
+    if (info.type == "BOARD") {
+      setToDos((oldToDos) => {
+        const entries = Object.entries(oldToDos);
+        [entries[source.index], entries[destination.index]] = [entries[destination.index], entries[source.index]];
+        const newObj = Object.fromEntries(entries);
+        return newObj;
       });
-    }
-    if(destination.droppableId !== source.droppableId){
-      // cross board movement.
-      setToDos((allBoards) =>{
-        const sourceBoard = [...allBoards[source.droppableId]];
-        const taskObj = sourceBoard[source.index];
-        const destinationBoard = [...allBoards[destination.droppableId]];
-        // 1) Delete item on source.index
-        sourceBoard.splice(source.index, 1);
-        // 2) Put back the item on the destination.index
-        destinationBoard.splice(destination?.index, 0, taskObj);
-        return {
-          ...allBoards,
-          [source.droppableId] : sourceBoard,
-          [destination.droppableId] : destinationBoard,
-        };
-      });
+    } else {
+      if (destination?.droppableId === source.droppableId) {
+        setToDos((oldToDos) => {
+          const boardCopy = [...oldToDos[source.droppableId]];
+          const taskObj = boardCopy[source.index];
+
+          boardCopy.splice(source?.index, 1);
+          boardCopy.splice(destination?.index, 0, taskObj);
+          return {
+            ...oldToDos,
+            [source.droppableId]: boardCopy,
+          };
+        });
+      } else {
+        setToDos((allBoard) => {
+          const sourceBoard = [...allBoard[source.droppableId]];
+          const taskObj = sourceBoard[source.index];
+          const targetBoard = [...allBoard[destination.droppableId]];
+
+          sourceBoard.splice(source.index, 1);
+          targetBoard.splice(destination.index, 0, taskObj);
+
+          return {
+            ...allBoard,
+            [source.droppableId]: sourceBoard,
+            [destination.droppableId]: targetBoard,
+          };
+        });
+      }
     }
   };
 
-  useEffect(()=>{
-    window.localStorage.setItem(date + "",JSON.stringify(toDos));
-    console.log('toDos',toDos);
-    console.log('date',date);
-  },[toDos]);
+  const handleOpen = () => {
+    setModalOpen(true);
+  };
 
+  const handleClose = () => {
+    setModalOpen(false);
+  };
 
-  return ( 
-    <DragDropContext onDragEnd={onDragEnd}>
-        <div>
-      <h2>Date Detail Page</h2>
-      <p>Selected date: {date}</p>
-      {/* Add more details or components as needed */}
-    </div>
-      <Wrapper>
-        <Boards>
-          {Object.keys(toDos).map(boardId => <Board boardId={boardId} key = {boardId} toDos = {toDos[boardId]} />)}
-        </Boards>  
-      </Wrapper>
-    </DragDropContext>
+  const handleSubmit = (inputValue: any) => {
+    if (inputValue == "") return window.alert("빈 값으로 추가할 수 없습니다.");
+    setToDos((p) => {
+      return {
+        ...p,
+        [inputValue]: [],
+      };
+    });
+    handleClose();
+  };
+
+  return (
+    <>
+      <Popup isOpen={isModalOpen} onClose={handleClose} onSubmit={handleSubmit} />
+
+      <DragDropContext onDragEnd={onDragEnd}>
+        <CoponentAddButton onClick={handleOpen}>
+          <Icon src="./icons/add.png" width="20px" />
+        </CoponentAddButton>
+        <Wrapper>
+          <Droppable droppableId={`boards${Math.random().toString(36).substring(7)}`} type="BOARD" direction="horizontal">
+            {(provided) => (
+              <Boards ref={provided.innerRef} {...provided.droppableProps}>
+                {Object.keys(toDos).map((k, i) => (
+                  <div>
+                    <Board key={k} boardId={k} toDos={toDos[k]} index={i} />
+                  </div>
+                ))}
+                {provided.placeholder}
+              </Boards>
+            )}
+          </Droppable>
+        </Wrapper>
+      </DragDropContext>
+    </>
   );
 }
 

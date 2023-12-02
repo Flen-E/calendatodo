@@ -1,8 +1,9 @@
-import ReactDOM from 'react-dom/client';
-import App from './App';
-import { RecoilRoot } from 'recoil';
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import { RecoilRoot } from "recoil";
 import { ThemeProvider, createGlobalStyle } from "styled-components";
-import insungitCutelivelyjisu from './fonts/insungitCutelivelyjisu.ttf';
+import insungitCutelivelyjisu from "./fonts/insungitCutelivelyjisu.ttf";
+import { darkTheme } from "./theme";
 
 const GlobalStyle = createGlobalStyle`
 @font-face {
@@ -65,7 +66,7 @@ table {
 }
 body {
   font-weight: 300;
-  font-family: 'Source Sans Pro', sans-serif;
+  font-family: 'insungitCutelivelyjisu', sans-serif;
   color:black;
   line-height: 1.2;
 }
@@ -76,15 +77,14 @@ a{
 }
 `;
 
-
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+  document.getElementById("root") as HTMLElement
 );
 root.render(
   <RecoilRoot>
-    <GlobalStyle/>
-    <App />
+    <ThemeProvider theme={darkTheme}>
+      <GlobalStyle />
+      <App />
+    </ThemeProvider>
   </RecoilRoot>
-
-    
 );
