@@ -34,6 +34,7 @@ const Input = styled.input`
   margin: 0 auto;
   padding: 5px;
   background: transparent;
+  font-family: 'insungitCutelivelyjisu', sans-serif;
 `;
 
 const overlayStyle: React.CSSProperties = {
@@ -69,6 +70,7 @@ const Button = styled.button<{ btn_type: string }>`
   height: 40px;
   border: 1px solid #dedede;
   background-color: white;
+  font-family: 'insungitCutelivelyjisu', sans-serif;
   cursor: pointer;
 `;
 

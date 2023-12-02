@@ -18,13 +18,13 @@ const BGAnimation = keyframes`
 `;
 
 const GradientBackground = styled.div`
-  background: linear-gradient(-45deg,#23A6D5, #87CEEB, #FFFF66, #23D5AB);
+  background: linear-gradient(-45deg, #96fbc4 0%, #f9f586 100%);
   height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center; 
   background-size: 400% 400%;
-  animation: ${BGAnimation} 15s ease infinite;
+  animation: ${BGAnimation} 5s ease infinite;
   
 a {
   text-decoration:none;

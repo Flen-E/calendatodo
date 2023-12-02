@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { ITodo, toDoState } from "../atoms";
 import { useSetRecoilState } from "recoil";
+import { IoMdClose } from "react-icons/io";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -57,11 +58,6 @@ const DelBtn = styled.button<{ boardId: string }>`
   cursor: pointer;
 `;
 
-const Icon = styled.img`
-  src: ${(p) => p.src};
-  width: ${(p) => p.width};
-  transform: rotate(45deg);
-`;
 
 const Form = styled.form``;
 
@@ -120,7 +116,7 @@ function Board({ toDos, boardId, index }: IBoardProps) {
           <Wrapper ref={provided.innerRef} {...provided.draggableProps}>
             <Title {...provided.dragHandleProps}>{boardId}</Title>
             <DelBtn boardId={boardId} onClick={closeBtn}>
-              <Icon src="../icons/add.png" width="20px" />
+            <IoMdClose />
             </DelBtn>
 
             <Form onSubmit={handleSubmit(onValid)}>

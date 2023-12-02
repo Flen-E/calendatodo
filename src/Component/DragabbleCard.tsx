@@ -1,7 +1,7 @@
 import React from "react";
 import { Draggable } from "react-beautiful-dnd";
 import styled from "styled-components";
-
+import { AiTwotoneDelete } from "react-icons/ai";
 const Card = styled.div<IDraggingProps>`
   border-radius: 5px;
   margin-bottom: 5px;
@@ -18,10 +18,6 @@ const CardTitle = styled.div`
   padding: 10px 10px;
 `;
 
-const Icon = styled.img`
-  src: ${(p) => p.src};
-  width: 15px;
-`;
 const Button = styled.button<{ id: number }>`
   background: transparent;
   border: 0;
@@ -47,6 +43,7 @@ function DragabbleCard({ index, toDoId, toDoText, onSubmit }: IDraggabbleCardPro
     } = e;
     onSubmit(+id);
   };
+
   return (
     <>
       <Draggable key={toDoId} draggableId={String(toDoId)} index={index}>
@@ -54,7 +51,7 @@ function DragabbleCard({ index, toDoId, toDoText, onSubmit }: IDraggabbleCardPro
           <Card $isDragging={snapshot.isDragging} ref={magic.innerRef} {...magic.dragHandleProps} {...magic.draggableProps}>
             <CardTitle>{toDoText}</CardTitle>
             <Button id={index} onClick={onClick}>
-              <Icon src="../icons/trash.png" />
+              <AiTwotoneDelete />
             </Button>
           </Card>
         )}
