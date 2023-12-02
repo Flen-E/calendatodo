@@ -1,9 +1,9 @@
 // src/components/Calendar.tsx
-import React from 'react';
-import Calendar from 'react-calendar';
-import styled, { keyframes } from 'styled-components';
-import { CalendarProps } from '../types';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import Calendar from "react-calendar";
+import styled, { createGlobalStyle, keyframes } from "styled-components";
+import { CalendarProps } from "../types";
+import { useNavigate } from "react-router-dom";
 
 const BGAnimation = keyframes`
   0% {
@@ -22,40 +22,56 @@ const GradientBackground = styled.div`
   height: 100vh;
   display: flex;
   align-items: center;
-  justify-content: center; 
+  justify-content: center;
   background-size: 400% 400%;
   animation: ${BGAnimation} 5s ease infinite;
-  
-a {
-  text-decoration:none;
-  color:inherit;
-}
-  
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
 `;
+
 
 const StyledCalendar = styled(Calendar)`
   max-width: 900px; /* Increase the max-width for a wider calendar */
-  background: #F2BC79;
+  background: #f2bc79;
   border-radius: 10px;
   box-shadow: 0 0 20px #e0e0e0;
-  padding : 20px 20px;
+  padding: 20px 20px;
   font-family: insungitCutelivelyjisu, sans-serif, Arial;
 
-  
+  .react-calendar__tile {
+    position: relative;
+  }
+
+  .event-dot-container {
+    position: absolute;
+    bottom: 25%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .event-dot {
+    width: 30px;
+    height: 30px;
+    background-color: green; /* 동그라미의 색상을 원하는 색상으로 변경 */
+    border-radius: 50%;
+  }
 
   & .react-calendar__tile--now {
-    background: #C5FFF8;
+    background: #c5fff8;
     color: black;
   }
 
   & .react-calendar__tile--hover {
-    background: #7B66FF;
+    background: #7b66ff;
     color: white;
   }
 
   & .react-calendar__tile:enabled:hover,
-    .react-calendar__tile:enabled:focus {
-      background-color: #7B66FF;
+  .react-calendar__tile:enabled:focus {
+    background-color: #7b66ff;
   }
 
   & .react-calendar__tile {
@@ -65,20 +81,20 @@ const StyledCalendar = styled(Calendar)`
     font-size: 16px;
   }
   & .react-calendar__month-view__days__day {
-    background-color: #F2DBCE;
-    height : 100px;
+    background-color: #f2dbce;
+    height: 100px;
   }
 
   & .react-calendar__tile:enabled:active {
-    background-color: #7B66FF;
+    background-color: #7b66ff;
   }
 
   & .react-calendar__month-view__days__day--weekend {
-    color: #FF0000; /* Red color for Sunday */
+    color: #ff0000; /* Red color for Sunday */
   }
 
   & .react-calendar__month-view__days__day--weekend:enabled:hover {
-    color: #0000FF; /* Blue color for Saturday */
+    color: #0000ff; /* Blue color for Saturday */
   }
 
   & .react-calendar__month-view__days__day--neighboringMonth {
@@ -90,81 +106,125 @@ const StyledCalendar = styled(Calendar)`
     align-items: flex-start;
   }
 
-  
   & .react-calendar__month-view__weekdays__weekday {
     text-align: center;
-    margin : 10px 0px;
-    font-size : 20px;
-
-    
+    margin: 10px 0px;
+    font-size: 20px;
   }
-  & .react-calendar__tile{
+  & .react-calendar__tile {
     border: none;
   }
 
-  & abbr{
+  & abbr {
     font-family: insungitCutelivelyjisu, sans-serif, Arial;
     text-decoration: none;
   }
 
-  & .react-calendar__navigation{
-    padding-top : 10px;
-    padding-bottom : 20px;
+  & .react-calendar__navigation {
+    padding-top: 10px;
+    padding-bottom: 20px;
     text-align: center;
     font-family: insungitCutelivelyjisu, sans-serif, Arial;
   }
-  
-  & .react-calendar__navigation__label__labelText{
+
+  & .react-calendar__navigation__label__labelText {
     font-family: insungitCutelivelyjisu, sans-serif, Arial;
-    font-size : 30px;
-    
-  }
-  & .react-calendar__navigation__label{
-    background: #F2BC79;
-    border : none;
-    
-  }
-
-  & .react-calendar__navigation__next-button{
-    background: #F2BC79;
-    border : none;
     font-size: 30px;
-    font-weight : bold;
-
+  }
+  & .react-calendar__navigation__label {
+    background: #f2bc79;
+    border: none;
   }
 
-  & .react-calendar__navigation__prev-button{
-    background: #F2BC79;
-    border : none;
+  & .react-calendar__navigation__next-button {
+    background: #f2bc79;
+    border: none;
     font-size: 30px;
-    font-weight : bold;
-
+    font-weight: bold;
   }
 
-  & .react-calendar__navigation__next2-button{
+  & .react-calendar__navigation__prev-button {
+    background: #f2bc79;
+    border: none;
+    font-size: 30px;
+    font-weight: bold;
+  }
+
+  & .react-calendar__navigation__next2-button {
     display: none;
   }
 
-  & .react-calendar__navigation__prev2-button{
+  & .react-calendar__navigation__prev2-button {
     display: none;
   }
 
-  & .react-calendar__navigation__arrow:hover{
+  & .react-calendar__navigation__arrow:hover {
     color: red;
-    cursor : pointer;
+    cursor: pointer;
   }
 
-  & .react-calendar__navigation__label{
+  & .react-calendar__navigation__label {
     pointer-events: none;
   }
-
 `;
+
 
 const CustomCalendar: React.FC<CalendarProps> = ({ events }) => {
   const navigate = useNavigate();
 
+  const [currentDate, setCurrentDate] = useState(new Date());
+
+  const handlePrevClick = () => {
+    setCurrentDate((prevDate) => {
+      const prevMonth = new Date(prevDate);
+      prevMonth.setMonth(prevMonth.getMonth() - 2); // 이전 달로 이동
+      return prevMonth;
+    });
+  };
+
+  const handleNextClick = () => {
+    setCurrentDate((prevDate) => {
+      const nextMonth = new Date(prevDate);
+      nextMonth.setMonth(nextMonth.getMonth() + 2); // 다음 달로 이동
+      return nextMonth;
+    });
+  };
+
+  useEffect(() => {
+    const markedDates = Object.keys(localStorage);
+
+    markedDates.forEach((date) => {
+      // 형식을 일치시키기 위해 new Date(date) 사용
+      // date가 현재 2020. 12. 14 식으로 나오는 걸 2020년 12월 14일 로 바꿔주면됨
+      const dateObject = new Date(date.replace(/\./g, "/"));
+
+      // 월과 일을 가져와서 월은 0부터 시작하므로 1을 더해줌
+      const year = dateObject.getFullYear();
+      const month = dateObject.getMonth() + 1;
+      const day = dateObject.getDate();
+
+      // 변환된 날짜를 문자열로 조합
+      const formattedDate = `${year}년 ${month}월 ${day}일`;
+      console.log(formattedDate);
+
+      // aria-label과 현재 달력의 날짜가 일치하는지 확인
+      const tile = document.querySelector(`[aria-label="${formattedDate}"]`);
+      console.log(tile);
+
+      if (tile) {
+        const dotContainer = document.createElement('div');
+        dotContainer.classList.add('event-dot-container');
+        tile.appendChild(dotContainer);
+
+        const dot = document.createElement('div');
+        dot.classList.add('event-dot');
+        dotContainer.appendChild(dot);
+      }
+    });
+  }, [currentDate]);
+
   const handleDateClick = (value: Date) => {
-    const formattedDate = value.toLocaleDateString().split('T')[0];
+    const formattedDate = value.toLocaleDateString().split("T")[0];
     navigate(`/date/${formattedDate}`);
   };
 
@@ -172,11 +232,13 @@ const CustomCalendar: React.FC<CalendarProps> = ({ events }) => {
     <GradientBackground>
       <StyledCalendar
         tileContent={({ date }) => {
-          const hasEvent = events.some(event => event.date.toDateString() === date.toDateString());
-          return hasEvent ? <div className="event-dot" /> : null;
+          const hasEvent = events.some((event) => event.date.toDateString() === date.toDateString());
+          return hasEvent ? <div className="event-dot-container"><div className="event-dot" /></div> : null;
         }}
         calendarType="US"
         onClickDay={handleDateClick}
+        prevLabel={<div onClick={handlePrevClick}>&#171;</div>} // prev2 버튼
+        nextLabel={<div onClick={handleNextClick}>&#187;</div>} // next2 버튼
       />
     </GradientBackground>
   );

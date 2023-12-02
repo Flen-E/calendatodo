@@ -52,7 +52,19 @@ const Boards = styled.div`
   gap: 10px;
 `;
 
-const CoponentAddButton = styled.div`
+const ComponentDateTitle = styled.div`
+  position : absolute;
+  top : 5%;
+  right : 38%;
+  background-color: rgba(190, 190, 190, 0.5);
+  color: white;
+  font-size : 5vh;
+  border-radius: 10px;
+  padding : 1vh 10vh;
+  
+`;
+
+const ComponentAddButton = styled.div`
   position: fixed;
   width: 50px;
   height: 50px;
@@ -70,6 +82,8 @@ const CoponentAddButton = styled.div`
     background-color: #a9fff8;
   }
 `;
+
+
 
 const PrevPageButton = styled.div`
   position: fixed;
@@ -213,13 +227,17 @@ function DateDetailPage() {
         />
 
         <DragDropContext onDragEnd={onDragEnd}>
+          <ComponentDateTitle>
+            {date}
+
+          </ComponentDateTitle>
           <PrevPageButton onClick={prevPage}>
             <GrLinkPrevious />
 
           </PrevPageButton>
-          <CoponentAddButton onClick={handleOpen}>
+          <ComponentAddButton onClick={handleOpen}>
             <IoMdAdd/>
-          </CoponentAddButton>
+          </ComponentAddButton>
           <SaveButton onClick={saveToDoList}>
             <AiOutlineSave />
 
@@ -244,7 +262,6 @@ function DateDetailPage() {
           </Wrapper>
         </DragDropContext>
       </StyleContext>
-    
   );
 }
 
