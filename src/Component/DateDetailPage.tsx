@@ -3,11 +3,12 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import styled, { keyframes } from "styled-components";
 import { toDoState } from "../atoms";
 import Board from "./Board";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Popup from "./Popup";
 import { IoMdAdd } from "react-icons/io";
 import { GrLinkPrevious } from "react-icons/gr";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { AiOutlineSave } from "react-icons/ai";
 
 const BGAnimation = keyframes`
   0% {
@@ -23,8 +24,9 @@ const BGAnimation = keyframes`
 
 const StyleContext = styled.div`
   background: linear-gradient(-45deg, #FFD600, #FF7A00, #FF0069, #D300C5, #7638FA);
-  height: 100vh;
+  height: 100%;
   display: flex;
+  position : absolute;
   background-size: 600% 600%;
   animation: ${BGAnimation} 15s ease infinite;
 `;
@@ -88,10 +90,41 @@ const PrevPageButton = styled.div`
   }
 `;
 
+const SaveButton = styled.div`
+   position: fixed;
+  width: 50px;
+  height: 50px;
+  background: radial-gradient(circle, white 1%, rgba(255, 255, 255, 0) 90%);
+  border-radius: 50px;
+  bottom: 10%;
+  right: 5%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.5s ease;
+  &:hover {
+    transform: scale(1.2);
+    background-color: #a9fff8;
+  }
+`;
+
 function DateDetailPage() {
+  const {date} = useParams();
   const [toDos, setToDos] = useRecoilState(toDoState);
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
+  
   const navigate = useNavigate();
+
+  useEffect(()=> {
+    if(date){
+      const storedToDoList = localStorage.getItem(date);
+      const toDoList = storedToDoList ? JSON.parse(storedToDoList) : [];
+      setToDos(toDoList);
+    }
+    
+  },[date]);
+
 
   const onDragEnd = (info: DropResult) => {
     const { destination, source } = info;
@@ -148,6 +181,12 @@ function DateDetailPage() {
     setModalOpen(false);
   };
 
+  const saveToDoList = () =>{
+    if (date) {
+      localStorage.setItem(date, JSON.stringify(toDos));
+    }
+  };
+
   const handleSubmit = (inputValue: any) => {
     if (inputValue == "") return window.alert("빈 값으로 추가할 수 없습니다.");
     setToDos((p) => {
@@ -181,6 +220,10 @@ function DateDetailPage() {
           <CoponentAddButton onClick={handleOpen}>
             <IoMdAdd/>
           </CoponentAddButton>
+          <SaveButton onClick={saveToDoList}>
+            <AiOutlineSave />
+
+          </SaveButton>
           <Wrapper>
             <Droppable
               droppableId={`boards${Math.random().toString(36).substring(7)}`}
