@@ -7,9 +7,10 @@ import { useEffect, useState } from "react";
 import Popup from "./Popup";
 import { IoMdAdd } from "react-icons/io";
 import { GrLinkPrevious } from "react-icons/gr";
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from "react-router-dom";
 import { AiOutlineSave } from "react-icons/ai";
-
+import { FcDeleteDatabase } from "react-icons/fc";
+import DeletePopup from "./DeletePopup";
 const BGAnimation = keyframes`
   0% {
     background-position: 0% 50%
@@ -23,10 +24,17 @@ const BGAnimation = keyframes`
 `;
 
 const StyleContext = styled.div`
-  background: linear-gradient(-45deg, #FFD600, #FF7A00, #FF0069, #D300C5, #7638FA);
+  background: linear-gradient(
+    -45deg,
+    #ffd600,
+    #ff7a00,
+    #ff0069,
+    #d300c5,
+    #7638fa
+  );
   height: 100%;
   display: flex;
-  position : absolute;
+  position: absolute;
   background-size: 600% 600%;
   animation: ${BGAnimation} 15s ease infinite;
 `;
@@ -53,15 +61,14 @@ const Boards = styled.div`
 `;
 
 const ComponentDateTitle = styled.div`
-  position : absolute;
-  top : 5%;
-  right : 38%;
+  position: absolute;
+  top: 5%;
+  right: 38%;
   background-color: rgba(190, 190, 190, 0.5);
   color: white;
-  font-size : 5vh;
+  font-size: 5vh;
   border-radius: 10px;
-  padding : 1vh 10vh;
-  
+  padding: 1vh 10vh;
 `;
 
 const ComponentAddButton = styled.div`
@@ -83,8 +90,6 @@ const ComponentAddButton = styled.div`
   }
 `;
 
-
-
 const PrevPageButton = styled.div`
   position: fixed;
   width: 50px;
@@ -105,7 +110,7 @@ const PrevPageButton = styled.div`
 `;
 
 const SaveButton = styled.div`
-   position: fixed;
+  position: fixed;
   width: 50px;
   height: 50px;
   background: radial-gradient(circle, white 1%, rgba(255, 255, 255, 0) 90%);
@@ -123,22 +128,40 @@ const SaveButton = styled.div`
   }
 `;
 
+const DeleteButton = styled.div`
+  position: fixed;
+  width: 50px;
+  height: 50px;
+  background: radial-gradient(circle, white 1%, rgba(255, 255, 255, 0) 90%);
+  border-radius: 50px;
+  bottom: 10%;
+  left: 5%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.5s ease;
+  &:hover {
+    transform: scale(1.2);
+    background-color: #a9fff8;
+  }
+`;
+
 function DateDetailPage() {
-  const {date} = useParams();
+  const { date } = useParams();
   const [toDos, setToDos] = useRecoilState(toDoState);
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
-  
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
+
   const navigate = useNavigate();
 
-  useEffect(()=> {
-    if(date){
+  useEffect(() => {
+    if (date) {
       const storedToDoList = localStorage.getItem(date);
       const toDoList = storedToDoList ? JSON.parse(storedToDoList) : [];
       setToDos(toDoList);
     }
-    
-  },[date]);
-
+  }, [date]);
 
   const onDragEnd = (info: DropResult) => {
     const { destination, source } = info;
@@ -195,7 +218,7 @@ function DateDetailPage() {
     setModalOpen(false);
   };
 
-  const saveToDoList = () =>{
+  const saveToDoList = () => {
     if (date) {
       localStorage.setItem(date, JSON.stringify(toDos));
     }
@@ -214,54 +237,73 @@ function DateDetailPage() {
 
   const prevPage = () => {
     navigate(`/`);
+  };
+
+  const deleteToDoList = () => {
+    setDeleteModalOpen(true);
+
+  };
+
+  const handleConfirm = () => {
+    if(date){
+      localStorage.removeItem(date);
+      navigate(`/`);
+    }
+    
+    
+  }
+  const handleDeleteColose = () => {
+    setDeleteModalOpen(false);
   }
 
-
   return (
-    
-      <StyleContext>
-        <Popup
-          isOpen={isModalOpen}
-          onClose={handleClose}
-          onSubmit={handleSubmit}
-        />
+    <StyleContext>
+      <Popup
+        isOpen={isModalOpen}
+        onClose={handleClose}
+        onSubmit={handleSubmit}
+      />
+      <DeletePopup
+        isOpen={isDeleteModalOpen}
+        onClose={handleDeleteColose}
+        onConfirm={handleConfirm}
+      />
 
-        <DragDropContext onDragEnd={onDragEnd}>
-          <ComponentDateTitle>
-            {date}
 
-          </ComponentDateTitle>
-          <PrevPageButton onClick={prevPage}>
-            <GrLinkPrevious />
-
-          </PrevPageButton>
-          <ComponentAddButton onClick={handleOpen}>
-            <IoMdAdd/>
-          </ComponentAddButton>
-          <SaveButton onClick={saveToDoList}>
-            <AiOutlineSave />
-
-          </SaveButton>
-          <Wrapper>
-            <Droppable
-              droppableId={`boards${Math.random().toString(36).substring(7)}`}
-              type="BOARD"
-              direction="horizontal"
-            >
-              {(provided) => (
-                <Boards ref={provided.innerRef} {...provided.droppableProps}>
-                  {Object.keys(toDos).map((k, i) => (
-                    <div>
-                      <Board key={k} boardId={k} toDos={toDos[k]} index={i} />
-                    </div>
-                  ))}
-                  {provided.placeholder}
-                </Boards>
-              )}
-            </Droppable>
-          </Wrapper>
-        </DragDropContext>
-      </StyleContext>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <ComponentDateTitle>{date}</ComponentDateTitle>
+        <PrevPageButton onClick={prevPage}>
+          <GrLinkPrevious />
+        </PrevPageButton>
+        <ComponentAddButton onClick={handleOpen}>
+          <IoMdAdd />
+        </ComponentAddButton>
+        <SaveButton onClick={saveToDoList}>
+          <AiOutlineSave />
+        </SaveButton>
+        <DeleteButton onClick={deleteToDoList}>
+          <FcDeleteDatabase size="40"/>
+        </DeleteButton>
+        <Wrapper>
+          <Droppable
+            droppableId={`boards${Math.random().toString(36).substring(7)}`}
+            type="BOARD"
+            direction="horizontal"
+          >
+            {(provided) => (
+              <Boards ref={provided.innerRef} {...provided.droppableProps}>
+                {Object.keys(toDos).map((k, i) => (
+                  <div>
+                    <Board key={k} boardId={k} toDos={toDos[k]} index={i} />
+                  </div>
+                ))}
+                {provided.placeholder}
+              </Boards>
+            )}
+          </Droppable>
+        </Wrapper>
+      </DragDropContext>
+    </StyleContext>
   );
 }
 

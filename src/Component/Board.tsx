@@ -58,7 +58,6 @@ const DelBtn = styled.button<{ boardId: string }>`
   cursor: pointer;
 `;
 
-
 const Form = styled.form``;
 
 interface IAreaProps {
@@ -97,7 +96,10 @@ function Board({ toDos, boardId, index }: IBoardProps) {
   const onSubmit = (del_id: number) => {
     // console.log(+boardId - 1 + "", del_id);
     setTodos((allBoards) => {
-      return { ...allBoards, [boardId]: allBoards[boardId].filter((_, idx) => idx !== del_id) };
+      return {
+        ...allBoards,
+        [boardId]: allBoards[boardId].filter((_, idx) => idx !== del_id),
+      };
     });
   };
 
@@ -116,7 +118,7 @@ function Board({ toDos, boardId, index }: IBoardProps) {
           <Wrapper ref={provided.innerRef} {...provided.draggableProps}>
             <Title {...provided.dragHandleProps}>{boardId}</Title>
             <DelBtn boardId={boardId} onClick={closeBtn}>
-            <IoMdClose />
+              <IoMdClose />
             </DelBtn>
 
             <Form onSubmit={handleSubmit(onValid)}>
@@ -124,9 +126,20 @@ function Board({ toDos, boardId, index }: IBoardProps) {
             </Form>
             <Droppable droppableId={boardId}>
               {(magic, info) => (
-                <Area $isDraggingOver={info.isDraggingOver} $draggingFromThis={Boolean(info.draggingFromThisWith)} ref={magic.innerRef} {...magic.droppableProps}>
+                <Area
+                  $isDraggingOver={info.isDraggingOver}
+                  $draggingFromThis={Boolean(info.draggingFromThisWith)}
+                  ref={magic.innerRef}
+                  {...magic.droppableProps}
+                >
                   {toDos.map((toDo, index) => (
-                    <DragabbleCard key={toDo.id} index={index} toDoId={toDo.id} toDoText={toDo.text} onSubmit={onSubmit} />
+                    <DragabbleCard
+                      key={toDo.id}
+                      index={index}
+                      toDoId={toDo.id}
+                      toDoText={toDo.text}
+                      onSubmit={onSubmit}
+                    />
                   ))}
                   {magic.placeholder}
                 </Area>
