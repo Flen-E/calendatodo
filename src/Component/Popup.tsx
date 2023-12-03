@@ -47,6 +47,7 @@ const overlayStyle: React.CSSProperties = {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
+  zIndex:1000,
 };
 
 const modalStyle: React.CSSProperties = {
@@ -57,6 +58,7 @@ const modalStyle: React.CSSProperties = {
   display: "flex",
   flexDirection: "column",
   gap: "10px",
+  
 };
 
 const Buttons = styled.div`

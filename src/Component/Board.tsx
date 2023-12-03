@@ -56,6 +56,7 @@ const DelBtn = styled.button<{ boardId: string }>`
   border: 0;
   position: absolute;
   cursor: pointer;
+  z-index:1;
 `;
 
 const Form = styled.form``;

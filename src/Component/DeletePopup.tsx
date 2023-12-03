@@ -25,17 +25,6 @@ const Title = styled.h2`
   font-size: 18px;
 `;
 
-const Input = styled.input`
-  width: 90%;
-  border-radius: 5px;
-  border: 1px solid black;
-  height: 30px;
-  display: flex;
-  margin: 0 auto;
-  padding: 5px;
-  background: transparent;
-  font-family: 'insungitCutelivelyjisu', sans-serif;
-`;
 
 const overlayStyle: React.CSSProperties = {
   position: "fixed",
@@ -47,6 +36,7 @@ const overlayStyle: React.CSSProperties = {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
+  zIndex:1000,
 };
 
 const modalStyle: React.CSSProperties = {
