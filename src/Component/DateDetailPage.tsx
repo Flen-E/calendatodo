@@ -26,11 +26,11 @@ const BGAnimation = keyframes`
 const StyleContext = styled.div`
   background: linear-gradient(
     -45deg,
-    #ffd600,
-    #ff7a00,
-    #ff0069,
-    #d300c5,
-    #7638fa
+    #003366,
+    #005b96,
+    #0077b6,
+    #5dade2,
+    #a9cce3
   );
   height: 100%;
   display: flex;
@@ -62,8 +62,11 @@ const Boards = styled.div`
 
 const ComponentDateTitle = styled.div`
   position: absolute;
-  top: 5%;
-  right: 38%;
+  top : 5%;
+  width: fit-content; /* 너비를 컨텐츠에 맞게 조절 */
+  max-width: 90%; /* 최대 너비 지정 */
+  left: 50%; /* 가로 중앙 정렬을 위해 50% 위치로 이동 */
+  transform: translateX(-50%); /* 중앙 정렬을 위해 이동 */
   background-color: rgba(190, 190, 190, 0.5);
   color: white;
   font-size: 5vh;
@@ -147,11 +150,29 @@ const DeleteButton = styled.div`
   }
 `;
 
+const SaveMessage = styled.div<{ isVisible: boolean }>`
+  position: fixed;
+  width: 200px;
+  height: 50px;
+  background: #8fcaca; /* Green color */
+  color: white;
+  border-radius: 5px;
+  bottom: 18%;
+  right: 5%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: ${({ isVisible }) => (isVisible ? 1 : 0)};
+  transition: opacity 0.5s ease;
+`;
+
+
 function DateDetailPage() {
   const { date } = useParams();
   const [toDos, setToDos] = useRecoilState(toDoState);
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
+  const [isSaveMessageVisible, setSaveMessageVisible] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
@@ -162,6 +183,7 @@ function DateDetailPage() {
       setToDos(toDoList);
     }
   }, [date]);
+
 
   const onDragEnd = (info: DropResult) => {
     const { destination, source } = info;
@@ -221,6 +243,12 @@ function DateDetailPage() {
   const saveToDoList = () => {
     if (date) {
       localStorage.setItem(date, JSON.stringify(toDos));
+      setSaveMessageVisible(true);
+
+      // 몇 초 후에 메시지를 숨기기
+      setTimeout(() => {
+        setSaveMessageVisible(false);
+      }, 2000); // 2초 후에 숨김
     }
   };
 
@@ -258,6 +286,7 @@ function DateDetailPage() {
 
   return (
     <StyleContext>
+      <SaveMessage isVisible={isSaveMessageVisible}>저장이 완료되었습니다.        </SaveMessage>
       <Popup
         isOpen={isModalOpen}
         onClose={handleClose}

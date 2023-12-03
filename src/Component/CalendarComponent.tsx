@@ -47,17 +47,34 @@ const StyledCalendar = styled(Calendar)`
 
   .event-dot-container {
     position: absolute;
-    bottom: 25%;
     left: 50%;
+    bottom : 10px;
     transform: translateX(-50%);
   }
-
   .event-dot {
-    width: 30px;
-    height: 30px;
-    background-color: green; /* 동그라미의 색상을 원하는 색상으로 변경 */
-    border-radius: 50%;
-  }
+      position: relative;
+      width: 50px;
+      height: 45px;
+    }
+    .event-dot:before,
+    .event-dot:after {
+      position: absolute;
+      content: "";
+      left: 25px;
+      top: 0;
+      width: 25px;
+      height: 40px;
+      background: #D7553F;
+      border-radius: 50px 50px 0 0;
+      transform: rotate(-45deg);
+      transform-origin: 0 100%;
+    }
+    .event-dot:after {
+      left: 0;
+      transform: rotate(45deg);
+      transform-origin: 100% 100%;
+    }
+
 
   & .react-calendar__tile--now {
     background: #c5fff8;
