@@ -189,7 +189,7 @@ function DateDetailPage() {
     const { destination, source } = info;
 
     if (!destination) return;
-    // console.log(info);
+
     if (info.type == "BOARD") {
       setToDos((oldToDos) => {
         const entries = Object.entries(oldToDos);

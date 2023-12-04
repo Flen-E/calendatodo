@@ -1,5 +1,5 @@
 // src/components/Calendar.tsx
-import React, { useEffect, useState } from "react";
+import React, { ReactEventHandler, useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import styled, { createGlobalStyle, keyframes } from "styled-components";
 import { CalendarProps } from "../types";
@@ -32,7 +32,6 @@ const GradientBackground = styled.div`
   }
 `;
 
-
 const StyledCalendar = styled(Calendar)`
   max-width: 900px; /* Increase the max-width for a wider calendar */
   background: #f2bc79;
@@ -45,36 +44,35 @@ const StyledCalendar = styled(Calendar)`
     position: relative;
   }
 
-  .event-dot-container {
+  .event-heart-container {
     position: absolute;
     left: 50%;
-    bottom : 10px;
+    bottom: 10px;
     transform: translateX(-50%);
   }
-  .event-dot {
-      position: relative;
-      width: 50px;
-      height: 45px;
-    }
-    .event-dot:before,
-    .event-dot:after {
-      position: absolute;
-      content: "";
-      left: 25px;
-      top: 0;
-      width: 25px;
-      height: 40px;
-      background: #D7553F;
-      border-radius: 50px 50px 0 0;
-      transform: rotate(-45deg);
-      transform-origin: 0 100%;
-    }
-    .event-dot:after {
-      left: 0;
-      transform: rotate(45deg);
-      transform-origin: 100% 100%;
-    }
-
+  .event-heart {
+    position: relative;
+    width: 50px;
+    height: 45px;
+  }
+  .event-heart:before,
+  .event-heart:after {
+    position: absolute;
+    content: "";
+    left: 25px;
+    top: 0;
+    width: 25px;
+    height: 40px;
+    background: #d7553f;
+    border-radius: 50px 50px 0 0;
+    transform: rotate(-45deg);
+    transform-origin: 0 100%;
+  }
+  .event-heart:after {
+    left: 0;
+    transform: rotate(45deg);
+    transform-origin: 100% 100%;
+  }
 
   & .react-calendar__tile--now {
     background: #c5fff8;
@@ -185,28 +183,17 @@ const StyledCalendar = styled(Calendar)`
   }
 `;
 
-
-const CustomCalendar: React.FC<CalendarProps> = ({ events }) => {
+const CalendarComponent: React.FC<CalendarProps> = ({ events }) => {
   const navigate = useNavigate();
+  const [buttonClicked, setButtonClicked] = useState(0);
 
-  const [currentDate, setCurrentDate] = useState(new Date());
-
-  const handlePrevClick = () => {
-    setCurrentDate((prevDate) => {
-      const prevMonth = new Date(prevDate);
-      prevMonth.setMonth(prevMonth.getMonth() - 2); // 이전 달로 이동
-      return prevMonth;
+   const handleClick = () => {
+    setButtonClicked((prev) => {
+      if (prev > 100000) prev = 0;
+      console.log(prev);
+      return prev + 1;
     });
   };
-
-  const handleNextClick = () => {
-    setCurrentDate((prevDate) => {
-      const nextMonth = new Date(prevDate);
-      nextMonth.setMonth(nextMonth.getMonth() + 2); // 다음 달로 이동
-      return nextMonth;
-    });
-  };
-
   useEffect(() => {
     const markedDates = Object.keys(localStorage);
 
@@ -222,23 +209,24 @@ const CustomCalendar: React.FC<CalendarProps> = ({ events }) => {
 
       // 변환된 날짜를 문자열로 조합
       const formattedDate = `${year}년 ${month}월 ${day}일`;
-      console.log(formattedDate);
+      
 
       // aria-label과 현재 달력의 날짜가 일치하는지 확인
       const tile = document.querySelector(`[aria-label="${formattedDate}"]`);
+      if(tile == null) return;
       console.log(tile);
 
       if (tile) {
-        const dotContainer = document.createElement('div');
-        dotContainer.classList.add('event-dot-container');
+        const dotContainer = document.createElement("div");
+        dotContainer.classList.add("event-heart-container");
         tile.appendChild(dotContainer);
 
-        const dot = document.createElement('div');
-        dot.classList.add('event-dot');
+        const dot = document.createElement("div");
+        dot.classList.add("event-heart");
         dotContainer.appendChild(dot);
       }
     });
-  }, [currentDate]);
+  }, [buttonClicked]);
 
   const handleDateClick = (value: Date) => {
     const formattedDate = value.toLocaleDateString().split("T")[0];
@@ -248,17 +236,13 @@ const CustomCalendar: React.FC<CalendarProps> = ({ events }) => {
   return (
     <GradientBackground>
       <StyledCalendar
-        tileContent={({ date }) => {
-          const hasEvent = events.some((event) => event.date.toDateString() === date.toDateString());
-          return hasEvent ? <div className="event-dot-container"><div className="event-dot" /></div> : null;
-        }}
         calendarType="US"
         onClickDay={handleDateClick}
-        prevLabel={<div onClick={handlePrevClick}>&#171;</div>} // prev2 버튼
-        nextLabel={<div onClick={handleNextClick}>&#187;</div>} // next2 버튼
+        prevLabel={<div onClick={handleClick}>&lt;</div>} // prev2 버튼
+        nextLabel={<div onClick={handleClick}>&gt;</div>} // next2 버튼
       />
     </GradientBackground>
   );
 };
 
-export default CustomCalendar;
+export default CalendarComponent;
