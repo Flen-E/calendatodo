@@ -1,6 +1,5 @@
 {
   "name": "calendatodo",
-  "homepage": "https://flen-e.github.io/calendatodo",
   "private": true,
   "dependencies": {
     "@tensorflow/tfjs": "^4.14.0",
@@ -28,7 +27,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy" : "npm run build",
+    "deploy" : "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -50,7 +51,9 @@
   },
   "devDependencies": {
     "@types/react-beautiful-dnd": "^13.1.7",
-    "@types/react-calendar": "^4.1.0"
-  }
+    "@types/react-calendar": "^4.1.0",
+    "gh-pages": "^6.1.0"
+  },
+  "homepage" : "https://flen-e/github.io/calendatodo/"
   
 }

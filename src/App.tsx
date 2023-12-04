@@ -13,7 +13,7 @@ const events: CalendarEvent[] = [
 const App: React.FC = () => {
   return (
     <Router basename={process.env.PUBLIC_URL}>
-      <Routes>
+      <Routes >
         <Route path="/" element={<CalendarComponent events={events} />} />
         <Route path="/date/:date" element={<DateDetailPage />} />
         <Route path="/*" element={<CalendarComponent events={events} />} />
