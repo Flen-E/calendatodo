@@ -1,6 +1,6 @@
 {
   "name": "calendatodo",
-  "version": "0.1.0",
+  "homepage": "https://flen-e.github.io/calendatodo",
   "private": true,
   "dependencies": {
     "@tensorflow/tfjs": "^4.14.0",
@@ -52,4 +52,5 @@
     "@types/react-beautiful-dnd": "^13.1.7",
     "@types/react-calendar": "^4.1.0"
   }
+  
 }
