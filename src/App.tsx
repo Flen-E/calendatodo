@@ -1,6 +1,6 @@
 // src/App.tsx
 import React from 'react';
-import { HashRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import CalendarComponent from './Component/CalendarComponent';
 import { CalendarEvent } from './types';
 import DateDetailPage from './Component/DateDetailPage';
@@ -16,6 +16,7 @@ const App: React.FC = () => {
       <Routes >
         <Route path="/" element={<CalendarComponent events={events} />} />
         <Route path="/date/:date" element={<DateDetailPage />} />
+
       </Routes>
     </Router>
   );
