@@ -16,7 +16,6 @@ const App: React.FC = () => {
       <Routes >
         <Route path="/" element={<CalendarComponent events={events} />} />
         <Route path="/date/:date" element={<DateDetailPage />} />
-        <Route path="/*" element={<CalendarComponent events={events} />} />
       </Routes>
     </Router>
   );
