@@ -18,7 +18,6 @@ const BGAnimation = keyframes`
 `;
 
 const GradientBackground = styled.div`
-  background: linear-gradient(-45deg, #96fbc4 0%, #f9f586 100%);
   height: 100vh;
   display: flex;
   align-items: center;
@@ -97,7 +96,8 @@ const StyledCalendar = styled(Calendar)`
   }
   & .react-calendar__month-view__days__day {
     background-color: #f2dbce;
-    height: 100px;
+    height: 10vh;
+
   }
 
   & .react-calendar__tile:enabled:active {
@@ -190,7 +190,6 @@ const CalendarComponent: React.FC<CalendarProps> = ({ events }) => {
    const handleClick = () => {
     setButtonClicked((prev) => {
       if (prev > 100000) prev = 0;
-      console.log(prev);
       return prev + 1;
     });
   };
@@ -214,7 +213,6 @@ const CalendarComponent: React.FC<CalendarProps> = ({ events }) => {
       // aria-label과 현재 달력의 날짜가 일치하는지 확인
       const tile = document.querySelector(`[aria-label="${formattedDate}"]`);
       if(tile == null) return;
-      console.log(tile);
 
       if (tile) {
         const dotContainer = document.createElement("div");
@@ -237,6 +235,7 @@ const CalendarComponent: React.FC<CalendarProps> = ({ events }) => {
     <GradientBackground>
       <StyledCalendar
         calendarType="US"
+        formatDay={(locale, date) => date.toLocaleString("en", {day: "numeric"})}
         onClickDay={handleDateClick}
         prevLabel={<div onClick={handleClick}>&lt;</div>} // prev2 버튼
         nextLabel={<div onClick={handleClick}>&gt;</div>} // next2 버튼

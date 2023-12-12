@@ -24,15 +24,16 @@ const BGAnimation = keyframes`
 `;
 
 const StyleContext = styled.div`
+  width: 100%;
+  height: 100%;
   background: linear-gradient(
     -45deg,
-    #003366,
-    #005b96,
-    #0077b6,
-    #5dade2,
-    #a9cce3
+    #f1a414,
+    #42e795,
+    #14d1c8,
+    #5610da,
+    #f16fbf
   );
-  height: 100%;
   display: flex;
   position: absolute;
   background-size: 600% 600%;
@@ -42,6 +43,7 @@ const StyleContext = styled.div`
 const Wrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
+  height: 100vh;
   width: 100vw;
   margin: 0 auto;
   justify-content: center;
@@ -69,9 +71,9 @@ const ComponentDateTitle = styled.div`
   transform: translateX(-50%); /* 중앙 정렬을 위해 이동 */
   background-color: rgba(190, 190, 190, 0.5);
   color: white;
-  font-size: 5vh;
+  font-size: 5vw;
   border-radius: 10px;
-  padding: 1vh 10vh;
+  padding: 1vh 5vh;
 `;
 
 const ComponentAddButton = styled.div`

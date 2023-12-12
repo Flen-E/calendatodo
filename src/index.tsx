@@ -1,9 +1,20 @@
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import { RecoilRoot } from "recoil";
-import { ThemeProvider, createGlobalStyle } from "styled-components";
+import { ThemeProvider, createGlobalStyle, keyframes } from "styled-components";
 import insungitCutelivelyjisu from "./fonts/insungitCutelivelyjisu.ttf";
 import { darkTheme } from "./theme";
+const BGAnimation = keyframes`
+  0% {
+    background-position: 0% 50%
+  }
+  50% {
+    background-position: 100% 50%
+  }
+  100% {
+    background-position: 0% 50%
+  }
+`;
 
 const GlobalStyle = createGlobalStyle`
 @font-face {
@@ -12,8 +23,8 @@ const GlobalStyle = createGlobalStyle`
     font-weight: normal;
     font-style: normal;
 }
-font-family: insungitCutelivelyjisu, sans-serif;
- html, body, div, span, applet, object, iframe,
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
+html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
 del, dfn, em, img, ins, kbd, q, s, samp,
@@ -44,7 +55,6 @@ footer, header, hgroup, main, menu, nav, section {
 }
 body {
   line-height: 1;
-  font-family: 'Source Sans Pro', sans-serif;
 }
 menu, ol, ul {
   list-style: none;
@@ -61,7 +71,7 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
-*{
+* {
   box-sizing: border-box;
 }
 body {
@@ -69,11 +79,14 @@ body {
   font-family: 'insungitCutelivelyjisu', sans-serif;
   color:black;
   line-height: 1.2;
+  background:linear-gradient(-45deg,#17a0df 0% ,#96fbc4 50%, #f9f586 100%);
+  background-size: 600% 600%;
+  animation: ${BGAnimation} 10s ease infinite;
+  ;
 }
-a{
-  text-decoration: none;
+a {
+  text-decoration:none;
   color:inherit;
-  
 }
 `;
 
