@@ -75,6 +75,7 @@ table {
   box-sizing: border-box;
 }
 body {
+  min-height : 100vh;
   font-weight: 300;
   font-family: 'insungitCutelivelyjisu', sans-serif;
   color:black;
