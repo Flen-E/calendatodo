@@ -2,7 +2,6 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import { RecoilRoot } from "recoil";
 import { ThemeProvider, createGlobalStyle, keyframes } from "styled-components";
-import insungitCutelivelyjisu from "./fonts/insungitCutelivelyjisu.ttf";
 import { darkTheme } from "./theme";
 const BGAnimation = keyframes`
   0% {

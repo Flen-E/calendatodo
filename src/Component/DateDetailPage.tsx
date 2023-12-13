@@ -120,7 +120,7 @@ const SaveButton = styled.div`
   height: 50px;
   background: radial-gradient(circle, white 1%, rgba(255, 255, 255, 0) 90%);
   border-radius: 50px;
-  bottom: 10%;
+  bottom: 5%;
   right: 5%;
   display: flex;
   justify-content: center;
@@ -139,7 +139,7 @@ const DeleteButton = styled.div`
   height: 50px;
   background: radial-gradient(circle, white 1%, rgba(255, 255, 255, 0) 90%);
   border-radius: 50px;
-  bottom: 10%;
+  bottom: 5%;
   left: 5%;
   display: flex;
   justify-content: center;

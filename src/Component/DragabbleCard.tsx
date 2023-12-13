@@ -3,7 +3,8 @@ import { Draggable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import { AiTwotoneDelete } from "react-icons/ai";
 const Card = styled.div<IDraggingProps>`
-  border-radius: 5px;
+  max-width: 230px;
+  border-radius: 5px; 
   margin-bottom: 5px;
   border: 1px solid "#4b9ff";
   background-color: ${(props) => props.theme.cardColor};
@@ -12,6 +13,7 @@ const Card = styled.div<IDraggingProps>`
   justify-content: space-between;
   font-size: 14px;
   font-weight: 400;
+
 `;
 
 const CardTitle = styled.div`

@@ -8,12 +8,12 @@ import { IoMdClose } from "react-icons/io";
 
 const Wrapper = styled.div`
   width: 100%;
-  min-width: 300px;
+  min-width: 250px;
   padding-top: 10px;
   /* background-color: ${(props) => props.theme.boardColor}; */
   background-color: rgba(190, 190, 190, 0.5);
   border-radius: 5px;
-  min-height: 230px;
+  min-height: 200px;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
