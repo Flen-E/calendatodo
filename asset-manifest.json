@@ -1,10 +1,15 @@
 {
   "files": {
-    "main.js": "/calendatodo/static/js/main.4210ee78.js",
+    "main.js": "/calendatodo/static/js/main.4014421f.js",
+    "static/media/squirrel.png": "/calendatodo/static/media/squirrel.5ebddb49f1f0290d34bc.png",
+    "static/media/frog.png": "/calendatodo/static/media/frog.4a49de7096a741a52416.png",
+    "static/media/cat.png": "/calendatodo/static/media/cat.e1cdbe94fc51d87ec543.png",
+    "static/media/penguin.png": "/calendatodo/static/media/penguin.81da9e051962e2aa24b2.png",
+    "static/media/rabbit.png": "/calendatodo/static/media/rabbit.6428b8fa579e0a02f93f.png",
     "index.html": "/calendatodo/index.html",
-    "main.4210ee78.js.map": "/calendatodo/static/js/main.4210ee78.js.map"
+    "main.4014421f.js.map": "/calendatodo/static/js/main.4014421f.js.map"
   },
   "entrypoints": [
-    "static/js/main.4210ee78.js"
+    "static/js/main.4014421f.js"
   ]
 }
