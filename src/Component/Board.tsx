@@ -17,6 +17,8 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
+  margin-top: 20px;
+  
 `;
 
 const Title = styled.h2`

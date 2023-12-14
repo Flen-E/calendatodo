@@ -17,6 +17,12 @@ const BGAnimation = keyframes`
   }
 `;
 
+const image1 = require("../img/cat.png");
+const image2 = require("../img/frog.png");
+const image3 = require("../img/penguin.png");
+const image4 = require("../img/rabbit.png");
+const image5 = require("../img/squirrel.png");
+
 const GradientBackground = styled.div`
   height: 100vh;
   display: flex;
@@ -43,34 +49,18 @@ const StyledCalendar = styled(Calendar)`
     position: relative;
   }
 
-  .event-heart-container {
-    position: absolute;
-    left: 50%;
-    bottom: 10px;
-    transform: translateX(-50%);
+  .event-container {
+    position : flex;
+    left : 10vw;
+    
   }
-  .event-heart {
-    position: relative;
-    width: 50px;
-    height: 45px;
-  }
-  .event-heart:before,
-  .event-heart:after {
-    position: absolute;
-    content: "";
-    left: 25px;
-    top: 0;
-    width: 25px;
-    height: 40px;
-    background: #d7553f;
-    border-radius: 50px 50px 0 0;
-    transform: rotate(-45deg);
-    transform-origin: 0 100%;
-  }
-  .event-heart:after {
-    left: 0;
-    transform: rotate(45deg);
-    transform-origin: 100% 100%;
+  .event-img {
+    max-width: 100px;
+    width: 9vw;
+    padding-left : 1vw;
+    min-width : 40px;
+    bottom : 10px;
+
   }
 
   & .react-calendar__tile--now {
@@ -186,6 +176,7 @@ const StyledCalendar = styled(Calendar)`
 const CalendarComponent: React.FC<CalendarProps> = ({ events }) => {
   const navigate = useNavigate();
   const [buttonClicked, setButtonClicked] = useState(0);
+  const [imageArray] = useState([image1, image2, image3, image4, image5]);
 
    const handleClick = () => {
     setButtonClicked((prev) => {
@@ -197,6 +188,10 @@ const CalendarComponent: React.FC<CalendarProps> = ({ events }) => {
     const markedDates = Object.keys(localStorage);
 
     markedDates.forEach((date) => {
+      //랜덤으로 이미지를 불러옴
+      const randomIndex = Math.floor(Math.random() * imageArray.length);
+      const selectImage = imageArray[randomIndex];
+      
       // 형식을 일치시키기 위해 new Date(date) 사용
       // date가 현재 2020. 12. 14 식으로 나오는 걸 2020년 12월 14일 로 바꿔주면됨
       const dateObject = new Date(date.replace(/\./g, "/"));
@@ -212,15 +207,20 @@ const CalendarComponent: React.FC<CalendarProps> = ({ events }) => {
 
       // aria-label과 현재 달력의 날짜가 일치하는지 확인
       const tile = document.querySelector(`[aria-label="${formattedDate}"]`);
+      console.log(tile);
       if(tile == null) return;
 
       if (tile) {
+        if(tile.querySelector("event-container"))
+          return;
         const dotContainer = document.createElement("div");
-        dotContainer.classList.add("event-heart-container");
+        dotContainer.classList.add("event-container");
         tile.appendChild(dotContainer);
 
-        const dot = document.createElement("div");
-        dot.classList.add("event-heart");
+        const dot = document.createElement('img');
+        dot.classList.add("event-img");
+        dot.src = selectImage;
+        dot.alt = 'Random';
         dotContainer.appendChild(dot);
       }
     });
@@ -241,6 +241,7 @@ const CalendarComponent: React.FC<CalendarProps> = ({ events }) => {
         nextLabel={<div onClick={handleClick}>&gt;</div>} // next2 버튼
       />
     </GradientBackground>
+    
   );
 };
 

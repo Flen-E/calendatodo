@@ -64,7 +64,7 @@ const Boards = styled.div`
 
 const ComponentDateTitle = styled.div`
   position: absolute;
-  top : 5%;
+  top : 40px;
   width: fit-content; /* 너비를 컨텐츠에 맞게 조절 */
   max-width: 90%; /* 최대 너비 지정 */
   left: 50%; /* 가로 중앙 정렬을 위해 50% 위치로 이동 */
@@ -73,7 +73,7 @@ const ComponentDateTitle = styled.div`
   color: white;
   font-size: 5vw;
   border-radius: 10px;
-  padding: 1vh 5vh;
+  padding: 0.8vh 7vw;
 `;
 
 const ComponentAddButton = styled.div`
@@ -167,6 +167,10 @@ const SaveMessage = styled.div<{ isVisible: boolean }>`
   opacity: ${({ isVisible }) => (isVisible ? 1 : 0)};
   transition: opacity 0.5s ease;
 `;
+
+const imageArray = [
+  ''
+]
 
 
 function DateDetailPage() {
